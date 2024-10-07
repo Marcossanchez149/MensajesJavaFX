@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.trabajo.UI.GruposController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+
+   <AnchorPane prefHeight="576.0" prefWidth="687.0">
+      <children>
+         <Pane fx:id="mensajesPane" layoutX="268.0" layoutY="230.0" visible="false" prefHeight="314.0" prefWidth="392.0">
+            <children>
+                <TextField fx:id="enviarMensaje" layoutX="17.0" layoutY="283.0" prefHeight="25.0" prefWidth="318.0" />
+               <Button fx:id="sendmessagebutton" layoutX="335.0" layoutY="283.0" mnemonicParsing="false" onAction="#enviarMensajeClick" text="Send" />
+               <ListView fx:id="areaMensajes" layoutX="14.0" layoutY="7.0" prefHeight="268.0" prefWidth="362.0" />
+            </children>
+         </Pane>
+         <Pane fx:id="inocioSesionPane" layoutX="24.0" layoutY="15.0" prefHeight="200.0" prefWidth="200.0">
+            <children>
+                <PasswordField fx:id="passwordbox" layoutX="19.0" layoutY="132.0" />
+                <Button layoutX="115.0" layoutY="161.0" onAction="#onLoginButtonClick" text="Log in" />
+                <TextField fx:id="emailbox" layoutX="19.0" layoutY="88.0" />
+                <Label layoutX="17.0" layoutY="115.0" text="Introduce password" />
+                <Label layoutX="19.0" layoutY="64.0" text="Introduce email" />
+               <Label layoutX="-2.0" text="Iniciar sesion juan,juan@blabla,juan123" />
+               <Label layoutX="17.0" layoutY="23.0" text="Nombre usuario" />
+               <TextField fx:id="usernamelbox" layoutX="15.0" layoutY="40.0" />
+               <Button onAction="#onCrearCuentaButtonClick" layoutX="19.0" layoutY="161.0" mnemonicParsing="false" text="Crear cuenta" />
+            </children>
+         </Pane>
+         <Pane fx:id="paneGrupos" layoutX="14.0" layoutY="260.0" prefHeight="302.0" prefWidth="254.0" visible="false">
+            <children>
+               <TableView fx:id="tablaGrupos" layoutX="14.0" layoutY="40.0" prefHeight="200.0" prefWidth="234.0">
+                 <columns>
+                   <TableColumn fx:id="nombreColumna" prefWidth="75.0" text="Grupo" />
+                 </columns>
+               </TableView>
+               <Label layoutX="96.0" layoutY="14.0" text="Tus grupos:" />
+            </children>
+         </Pane>
+         <Pane fx:id="crearYunirGurpo" layoutX="305.0" layoutY="15.0" prefHeight="200.0" prefWidth="355.0" visible="false">
+            <children>
+               <Pane layoutX="185.0" prefHeight="200.0" prefWidth="170.0">
+                  <children>
+                     <Label layoutX="14.0" layoutY="42.0" text="Nombre del grupo" />
+                     <TextField fx:id="nombreGrupo" layoutX="14.0" layoutY="59.0" />
+                     <Label layoutX="14.0" layoutY="100.0" text="Contraseña" />
+                     <TextField fx:id="contraseñaGrupo" layoutX="14.0" layoutY="117.0" />
+                     <Button fx:id="botonCrearGrupo" layoutX="48.0" layoutY="161.0" mnemonicParsing="false" onAction="#enCrearGrupoClick" text="Crear grupo" />
+                     <Label layoutX="12.0" layoutY="14.0" text="Crear grupo" />
+                  </children>
+               </Pane>
+               <Pane prefHeight="200.0" prefWidth="181.0">
+                  <children>
+                     <Label layoutX="14.0" layoutY="14.0" text="Unirse a grupo" />
+                     <Label layoutX="14.0" layoutY="44.0" text="Nombre del grupo " />
+                     <Label layoutX="14.0" layoutY="100.0" text="Contraseña" />
+                     <TextField fx:id="nombreGrupoUnirse" layoutX="14.0" layoutY="61.0" />
+                     <TextField fx:id="contraseñaGrupoUnirse" layoutX="14.0" layoutY="117.0" />
+                     <Button layoutX="41.0" layoutY="161.0" mnemonicParsing="false" onAction="#enUnirseaGrupoClick" text="Unirse a grupo" />
+                  </children>
+               </Pane>
+            </children>
+         </Pane>
+          <Label fx:id="welcomeText" layoutX="40.0" layoutY="212.0" prefHeight="17.0" prefWidth="291.0" />
+      </children>
+   </AnchorPane>
+</VBox>
