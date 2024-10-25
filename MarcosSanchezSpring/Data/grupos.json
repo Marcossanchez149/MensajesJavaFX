@@ -1,0 +1,259 @@
+[
+  {
+    "participantes": [
+      {
+        "email": "juan@blabla",
+        "userName": "juan",
+        "password": "juan123"
+      },
+      {
+        "email": "Marcos@blabla",
+        "userName": "Marcos",
+        "password": "Marcos123"
+      }
+    ],
+    "nombre": "Sectarios",
+    "contraseña": "1234",
+    "mensajes": [
+      {
+        "contenido": "Que tal",
+        "usuario": {
+          "email": "juan@blabla",
+          "userName": "juan",
+          "password": "juan123"
+        }
+      },
+      {
+        "contenido": "Buenas",
+        "usuario": {
+          "email": "Marcos@blabla",
+          "userName": "Marcos",
+          "password": "Marcos123"
+        }
+      },
+      {
+        "contenido": "Estais listos para la reunion?",
+        "usuario": {
+          "email": "juan@blabla",
+          "userName": "juan",
+          "password": "juan123"
+        }
+      }
+    ],
+    "privado": false
+  },
+  {
+    "participantes": [
+      {
+        "email": "juan@blabla",
+        "userName": "juan",
+        "password": "juan123"
+      },
+      null,
+      {
+        "email": "miguel@blabla",
+        "userName": "miguel",
+        "password": "miguel123"
+      },
+      {
+        "email": "felipe@blabla",
+        "userName": "felipe",
+        "password": "felipe123"
+      },
+      {
+        "email": "luis@blabla",
+        "userName": "luis",
+        "password": "luis123"
+      }
+    ],
+    "nombre": "ElPadrinoMafia",
+    "contraseña": "123",
+    "mensajes": [
+      {
+        "contenido": "Te voy a hacer una oferta que no vas a poder rechazar",
+        "usuario": {
+          "email": "juan@blabla",
+          "userName": "juan",
+          "password": "juan123"
+        }
+      },
+      {
+        "contenido": "Me parece bien",
+        "usuario": {
+          "email": "luis@blabla",
+          "userName": "luis",
+          "password": "luis123"
+        }
+      }
+    ],
+    "privado": false
+  },
+  {
+    "participantes": [
+      {
+        "email": "juan@blabla",
+        "userName": "juan",
+        "password": "juan123"
+      }
+    ],
+    "nombre": "lokos",
+    "contraseña": "12",
+    "mensajes": [
+      {
+        "contenido": "toy loko",
+        "usuario": {
+          "email": "juan@blabla",
+          "userName": "juan",
+          "password": "juan123"
+        }
+      }
+    ],
+    "privado": false
+  },
+  {
+    "participantes": [
+      {
+        "userName": "juan"
+      },
+      {
+        "userName": "marcos"
+      },
+      {
+        "email": "benito@blabla",
+        "userName": "benito",
+        "password": "benito123"
+      },
+      {
+        "email": "benito@blabla",
+        "userName": "benito",
+        "password": "benito123"
+      },
+      {
+        "email": "benito@blabla",
+        "userName": "benito",
+        "password": "benito123"
+      },
+      {
+        "email": "benito@blabla",
+        "userName": "benito",
+        "password": "benito123"
+      }
+    ],
+    "nombre": "Sombrios",
+    "mensajes": [
+      {
+        "contenido": "Lol",
+        "usuario": {
+          "email": "benito@blabla",
+          "userName": "benito",
+          "password": "benito123"
+        }
+      }
+    ],
+    "privado": true
+  },
+  {
+    "participantes": [
+      {
+        "userName": "juan"
+      },
+      {
+        "userName": "marcos"
+      }
+    ],
+    "nombre": "Sombrios",
+    "mensajes": [],
+    "privado": true
+  },
+  {
+    "participantes": [
+      {
+        "userName": "juan"
+      },
+      {
+        "userName": "marcos"
+      }
+    ],
+    "nombre": "Sombrios",
+    "mensajes": [],
+    "privado": true
+  },
+  {
+    "participantes": [
+      {
+        "userName": "juan"
+      },
+      {
+        "userName": "marcos"
+      }
+    ],
+    "nombre": "Sombrios",
+    "mensajes": [],
+    "privado": true
+  },
+  {
+    "participantes": [
+      {
+        "email": "juan@blabla",
+        "userName": "juan",
+        "password": "juan123"
+      },
+      {
+        "email": "benito@blabla",
+        "userName": "benito",
+        "password": "benito123"
+      },
+      {
+        "email": "marcos@blabla",
+        "userName": "marcos",
+        "password": "marcos123"
+      }
+    ],
+    "nombre": "prueb",
+    "mensajes": [
+      {
+        "contenido": "Hola",
+        "usuario": {
+          "email": "marcos@blabla",
+          "userName": "marcos",
+          "password": "marcos123"
+        }
+      },
+      {
+        "contenido": "Hola caracola",
+        "usuario": {
+          "email": "juan@blabla",
+          "userName": "juan",
+          "password": "juan123"
+        }
+      }
+    ],
+    "privado": true
+  },
+  {
+    "participantes": [
+      {
+        "email": "eusebio@blabla",
+        "userName": "eusebio",
+        "password": "eusebio123"
+      },
+      {
+        "email": "juan@blabla",
+        "userName": "juan",
+        "password": "juan123"
+      }
+    ],
+    "nombre": "lol",
+    "mensajes": [
+      {
+        "contenido": "Que tal eusebio",
+        "usuario": {
+          "email": "juan@blabla",
+          "userName": "juan",
+          "password": "juan123"
+        }
+      }
+    ],
+    "privado": true
+  }
+]
