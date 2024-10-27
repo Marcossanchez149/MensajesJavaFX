@@ -1,8 +1,10 @@
 package com.example.marcossanchezspring.ui;
 
 
+import com.example.marcossanchezspring.domain.errors.ErrorApp;
 import com.example.marcossanchezspring.domain.modelo.Usuario;
 import com.example.marcossanchezspring.domain.service.UsuarioService;
+import io.vavr.control.Either;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -19,15 +21,15 @@ public class AdministracionUsuarios {
         }
     }
 
-    public boolean comprobarUsuario(Usuario usuario) {
+    public Either<ErrorApp,Boolean> comprobarUsuario(Usuario usuario) {
         return usuarioService.comprobarUsuario(usuario);
     }
 
-    public boolean crearUsuario(Usuario usuario) {
+    public Either<ErrorApp, Boolean> crearUsuario(Usuario usuario) {
         return usuarioService.crearUsuario(usuario);
     }
 
-    public List<Usuario> buscarUsuariosPorNombres(String nombresUsuariosStr) {
+    public Either<ErrorApp, List<Usuario>> buscarUsuariosPorNombres(String nombresUsuariosStr) {
         return usuarioService.buscarUsuariosPorNombres(nombresUsuariosStr);
     }
 }

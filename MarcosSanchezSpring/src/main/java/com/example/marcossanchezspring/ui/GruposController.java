@@ -1,9 +1,13 @@
 package com.example.marcossanchezspring.ui;
 
 import com.example.marcossanchezspring.common.Constantes;
+import com.example.marcossanchezspring.domain.errors.ErrorApp;
+import com.example.marcossanchezspring.domain.errors.ErrorAppDatos;
+import com.example.marcossanchezspring.domain.errors.ErrorAppGrupos;
+import com.example.marcossanchezspring.domain.errors.ErrorAppUsuarios;
 import com.example.marcossanchezspring.domain.modelo.Grupo;
-import com.example.marcossanchezspring.domain.modelo.Mensaje;
 import com.example.marcossanchezspring.domain.modelo.Usuario;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -11,25 +15,29 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import org.springframework.stereotype.Component;
-import java.util.List;
 import java.util.Objects;
 
 @Component
 public class GruposController {
 
     private final AdministracionUsuarios administracionUsuarios;
-
+    private  Alert alertError;
     private final AdministracionGrupo administracionGrupo;
-
-
     private Usuario usuarioIniciadoSesion;
 
-    public GruposController(AdministracionUsuarios administracionUsuarios, AdministracionGrupo administracionGrupo) {
+    public GruposController(AdministracionUsuarios administracionUsuarios,
+                            AdministracionGrupo administracionGrupo) {
         this.administracionUsuarios = administracionUsuarios;
         this.administracionGrupo = administracionGrupo;
+        Platform.runLater(() -> {
+            this.alertError = new Alert(Alert.AlertType.ERROR);
+            alertError.setTitle("Error");
+            alertError.setHeaderText("Error");
+        });
     }
 
     private ObservableList<Grupo> listaGrupos = FXCollections.observableArrayList();
+
     @FXML
     private ListView areaMensajes;
     @FXML
@@ -78,7 +86,8 @@ public class GruposController {
         nombreColumna.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         listaGrupos = FXCollections.observableArrayList();
         tablaGrupos.setItems(listaGrupos);
-        tablaGrupos.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+        tablaGrupos.getSelectionModel().selectedItemProperty().
+                addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 mostrarMensaje();
             }
@@ -91,10 +100,11 @@ public class GruposController {
         String nombreUsuario = usernamelbox.getText();
         String correoUsuario = emailbox.getText();
         String contrasenia = passwordbox.getText();
-        if(!Objects.equals(nombreUsuario, "") && !Objects.equals(correoUsuario, "") && !Objects.equals(contrasenia, ""))
+        if(!Objects.equals(nombreUsuario, "") && !Objects.equals(correoUsuario, "")
+                && !Objects.equals(contrasenia, ""))
         {
-            boolean respuesta = administracionUsuarios.comprobarUsuario(new Usuario(nombreUsuario, correoUsuario, contrasenia));
-            if(respuesta) {
+            administracionUsuarios.comprobarUsuario
+                    (new Usuario(nombreUsuario, correoUsuario, contrasenia)).peek(ok ->{
                 usuarioIniciadoSesion = new Usuario(nombreUsuario, correoUsuario, contrasenia);
                 welcomeText.setText("Se ha iniciado sesión, Bienvenido "+ nombreUsuario);
                 paneGrupos.setVisible(true);
@@ -102,15 +112,14 @@ public class GruposController {
                 mensajesPane.setVisible(true);
                 inocioSesionPane.setVisible(false);
                 actualizarGruposUsuario();
-            }else
-                welcomeText.setText("No se ha iniciado sesion");
+            }).peekLeft(this::mostratError);
         }
     }
 
     private void actualizarGruposUsuario() {
         listaGrupos.clear();
-        List<Grupo> grupos = administracionGrupo.obtenerGruposDeUsuario(usuarioIniciadoSesion);
-        listaGrupos.addAll(grupos);
+        administracionGrupo.obtenerGruposDeUsuario(usuarioIniciadoSesion).peek(grupos1 ->
+                listaGrupos.addAll(grupos1)).peekLeft(this::mostratError);
     }
 
     @FXML
@@ -118,11 +127,16 @@ public class GruposController {
         String nombreGrupoStr = this.nombreGrupo.getText();
         String contrasenaGrupoStr = this.contrasenaGrupo.getText();
         if (!nombreGrupoStr.isEmpty() && !contrasenaGrupoStr.isEmpty()){
-            administracionGrupo.crearGrupo(new Grupo(nombreGrupoStr,contrasenaGrupoStr,false));
-            administracionGrupo.anadirUsuarioaGrupo(new Grupo(nombreGrupoStr,contrasenaGrupoStr,false),usuarioIniciadoSesion);
-            actualizarGruposUsuario();
-            nombreGrupo.clear();
-            contrasenaGrupo.clear();
+            administracionGrupo.crearGrupo(new Grupo
+                    (nombreGrupoStr,contrasenaGrupoStr,false)).peek(ok ->{
+                        administracionGrupo.anadirUsuarioaGrupo
+                                ((new Grupo(nombreGrupoStr,contrasenaGrupoStr,false)
+                            ),usuarioIniciadoSesion).peek(ok1 -> {
+                            actualizarGruposUsuario();
+                            nombreGrupo.clear();
+                            contrasenaGrupo.clear();
+                        }).peekLeft(this::mostratError);
+                    }).peekLeft(this::mostratError);
         }
     }
 
@@ -130,12 +144,15 @@ public class GruposController {
     public void enUnirseaGrupoClick() {
         String nombrerGrupo = nombreGrupoUnirse.getText();
         String contrasenaGrupoAUnirse = contrasenaGrupoUnirse.getText();
-        if(administracionGrupo.comprobarEntradaGrupo(new Grupo(nombrerGrupo,contrasenaGrupoAUnirse,false))){
-            administracionGrupo.anadirUsuarioaGrupo(new Grupo(nombrerGrupo,contrasenaGrupoAUnirse,false),usuarioIniciadoSesion);
-            actualizarGruposUsuario();
-            nombreGrupoUnirse.clear();
-            contrasenaGrupoUnirse.clear();
-        }
+        administracionGrupo.comprobarEntradaGrupo(new Grupo(nombrerGrupo,contrasenaGrupoAUnirse,
+                false)).peek(ok ->{
+            administracionGrupo.anadirUsuarioaGrupo(new Grupo(nombrerGrupo,contrasenaGrupoAUnirse,
+                    false),usuarioIniciadoSesion).peek(ok1 -> {
+                actualizarGruposUsuario();
+                nombreGrupoUnirse.clear();
+                contrasenaGrupoUnirse.clear();
+            }).peekLeft(this::mostratError);
+        }).peekLeft(this::mostratError);
     }
 
 
@@ -144,9 +161,11 @@ public class GruposController {
         String mensaje = enviarMensaje.getText();
         Grupo grupoSeleccionado = tablaGrupos.getSelectionModel().getSelectedItem();
         if (grupoSeleccionado != null && !mensaje.trim().isEmpty()) {
-            administracionGrupo.enviarMensaje(grupoSeleccionado, mensaje, usuarioIniciadoSesion);
-            enviarMensaje.clear();
-            mostrarMensaje();
+            administracionGrupo.enviarMensaje(grupoSeleccionado, mensaje,
+                    usuarioIniciadoSesion).peek(ok -> {
+                mostrarMensaje();
+                enviarMensaje.clear();
+            }).peekLeft(this::mostratError);
         }
     }
 
@@ -154,16 +173,17 @@ public class GruposController {
     public void mostrarMensaje() {
         Grupo grupoSeleccionado = tablaGrupos.getSelectionModel().getSelectedItem();
         if (grupoSeleccionado != null) {
-            List<Mensaje> mensajes = administracionGrupo.obtenerMensajes(grupoSeleccionado);
-            areaMensajes.getItems().clear();
-            mensajes.forEach(mensaje -> {
-                Usuario usuario = mensaje.getUsuario();
-                if (usuario != null) {
-                    areaMensajes.getItems().add(usuario.getUserName() + ": " + mensaje.getContenido());
-                } else {
-                    areaMensajes.getItems().add(Constantes.USUARIODESCONOCIDO + mensaje.getContenido());
-                }
-            });
+            administracionGrupo.obtenerMensajes(grupoSeleccionado).peek(mensajes -> {
+                areaMensajes.getItems().clear(); // Clear the list before adding new messages
+                mensajes.forEach(mensaje -> {
+                    Usuario usuario = mensaje.getUsuario();
+                    if (usuario != null) {
+                        areaMensajes.getItems().add(usuario.getUserName() + ": " + mensaje.getContenido());
+                    } else {
+                        areaMensajes.getItems().add(Constantes.USUARIODESCONOCIDO + mensaje.getContenido());
+                    }
+                });
+            }).peekLeft(this::mostratError);
         }
     }
 
@@ -174,22 +194,15 @@ public class GruposController {
         String contrasenia = passwordbox.getText();
         if(!Objects.equals(nombreUsuario, "") && !Objects.equals(correoUsuario, "") && !Objects.equals(contrasenia, ""))
         {
-            if(!administracionUsuarios.comprobarUsuario(new Usuario(nombreUsuario, correoUsuario, contrasenia))) {
-                boolean respuesta = administracionUsuarios.crearUsuario(new Usuario(nombreUsuario, correoUsuario, contrasenia));
-                if(respuesta) {
-                    usuarioIniciadoSesion = new Usuario(nombreUsuario, correoUsuario, contrasenia);
-                    welcomeText.setText(Constantes.SEHACREADOLACUNETA+ nombreUsuario);
-                    paneGrupos.setVisible(true);
-                    crearYunirGurpo.setVisible(true);
-                    mensajesPane.setVisible(true);
-                    inocioSesionPane.setVisible(false);
-                    actualizarGruposUsuario();
-                }else {
-                    welcomeText.setText(Constantes.NOSEHACREADOLACUENTA);
-                }
-            }else {
-                welcomeText.setText("El usuario ya existe");
-            }
+            administracionUsuarios.crearUsuario(new Usuario(nombreUsuario, correoUsuario, contrasenia)).peek(ok1 -> {
+                usuarioIniciadoSesion = new Usuario(nombreUsuario, correoUsuario, contrasenia);
+                welcomeText.setText(Constantes.SEHACREADOLACUNETA+ nombreUsuario);
+                paneGrupos.setVisible(true);
+                crearYunirGurpo.setVisible(true);
+                mensajesPane.setVisible(true);
+                inocioSesionPane.setVisible(false);
+                actualizarGruposUsuario();
+                }).peekLeft(this::mostratError);
         }else {
             welcomeText.setText("Faltan datos");
         }
@@ -200,12 +213,56 @@ public class GruposController {
         String nombreGrupoStr = this.nombreGrupoprivado.getText();
         String nombresUsuariosStr = this.usuariosGruposprivado.getText();
         if(!nombreGrupoStr.isEmpty() && !nombresUsuariosStr.isEmpty()){
-                List<Usuario> usuariosGruposPrivados = administracionUsuarios.buscarUsuariosPorNombres(nombresUsuariosStr);
-                administracionGrupo.crearGrupo(new Grupo(nombreGrupoStr,usuariosGruposPrivados,true));
-                administracionGrupo.anadirUsuarioaGrupo(new Grupo(nombreGrupoStr,usuariosGruposPrivados,true),usuarioIniciadoSesion);
-                actualizarGruposUsuario();
-                nombreGrupo.clear();
-                contrasenaGrupo.clear();
+                administracionUsuarios.buscarUsuariosPorNombres(nombresUsuariosStr).peek(usuariosGruposPrivados -> {
+                    administracionGrupo.crearGrupo(new Grupo(nombreGrupoStr,usuariosGruposPrivados,true)).peek(ok ->{
+                            administracionGrupo.anadirUsuarioaGrupo(new Grupo(nombreGrupoStr,usuariosGruposPrivados,true)
+                                    ,usuarioIniciadoSesion).peek(ok1 -> {
+                                actualizarGruposUsuario();
+                                nombreGrupo.clear();
+                                contrasenaGrupo.clear();
+                                }).peekLeft(this::mostratError);
+                    }).peekLeft(this::mostratError);
+                }).peekLeft(this::mostratError);
         }
+    }
+    private void mostratError(ErrorApp errorText) {
+        String errorMensaje = "";
+        switch(errorText)
+        {
+            case ErrorAppDatos e -> {
+                if(e == ErrorAppDatos.TIMEOUT)
+                {
+                    errorMensaje = "Error en la base de datos";
+                } else if (e == ErrorAppDatos.NO_CONNECTION)
+                {
+                    errorMensaje = "Error al guardar el grupo";
+                }
+            }
+            case ErrorAppGrupos e -> {
+                switch(e)
+                {
+                    case GRUPO_YA_EXISTE -> errorMensaje = "El grupo ya existe";
+                    case NO_GROUPS_FOUND -> errorMensaje = "No se han encontrado grupos";
+                    case GRUPO_CONTRASENA_INCORRECTA -> errorMensaje = "Contraseña incorrecta";
+                    case USUARIO_YA_EN_GRUPO -> errorMensaje = "Usuario ya en grupo";
+                    case NOMBRE_NO_VALIDO -> errorMensaje = "Nombre no valido";
+                    case NO_MESSAGES_FOUND -> errorMensaje = "No hay mensajes";
+                }
+
+            }
+            case ErrorAppUsuarios e -> {
+                switch(e)
+                {
+                    case ERROR_GUARDAR_USUARIO -> errorMensaje = "El grupo ya existe";
+                    case USUARIO_NO_EXISTE -> errorMensaje = "Usuario no existe";
+                    case PASSWORD_INCORRECTA -> errorMensaje = "Contraseña incorrecta";
+                    case USUARIO_NO_ENCONTRADO -> errorMensaje = "Usuario no encontrado";
+                    case USUARIO_YA_EXISTE -> errorMensaje = "Usuario ya existe";
+                }
+
+            }
+        }
+        alertError.setContentText(errorMensaje);
+        alertError.showAndWait();
     }
 }

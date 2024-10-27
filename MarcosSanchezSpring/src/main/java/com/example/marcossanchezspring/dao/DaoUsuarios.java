@@ -1,10 +1,11 @@
 package com.example.marcossanchezspring.dao;
 
 
+import com.example.marcossanchezspring.domain.errors.ErrorApp;
+import com.example.marcossanchezspring.domain.errors.ErrorAppUsuarios;
 import com.example.marcossanchezspring.domain.modelo.Usuario;
+import io.vavr.control.Either;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 public class DaoUsuarios {
@@ -15,21 +16,39 @@ public class DaoUsuarios {
         this.dataBase = db;
     }
 
-    public boolean anadirUsuario(Usuario usuario) {
-        List<Usuario> usuarios = dataBase.loadUsuarios();
-        usuarios.add(usuario);
-        return dataBase.saveUsuarios(usuarios);
+    public Either<ErrorApp,Boolean> anadirUsuario(Usuario usuario) {
+        return dataBase.loadUsuarios().flatMap(usuarios -> {
+            if (usuarios.stream().anyMatch(u -> u.getUserName().equals(usuario.getUserName()))) {
+                return Either.left(ErrorAppUsuarios.USUARIO_YA_EXISTE);
+            }
+            usuarios.add(usuario);
+            return dataBase.saveUsuarios(usuarios);
+        });
     }
 
-    public Usuario getUsuarioComprobacion(Usuario usuario) {
-        return dataBase.loadUsuarios().stream().filter(user -> user.getUserName().
-                        equals(usuario.getUserName() ) &&
-                        user.getPassword().equals(usuario.getPassword()) &&
-                        user.getEmail().equals(usuario.getEmail()))
-                .findFirst().orElse(null);
+    public Either<ErrorApp,Usuario> getUsuarioComprobacion(Usuario usuario) {
+        return dataBase.loadUsuarios().flatMap(usuarios -> {
+            Usuario usuarioDB = usuarios.stream()
+                    .filter(u -> u.getUserName().equals(usuario.getUserName()))
+                    .findFirst()
+                    .orElse(null);
+            if (usuarioDB == null) {
+                return Either.left(ErrorAppUsuarios.USUARIO_NO_EXISTE);
+            }
+            return Either.right(usuarioDB);
+        });
     }
 
-    public Usuario getUsuarioByUsername(String s) {
-     return dataBase.loadUsuarios().stream().filter(usuario -> usuario.getUserName().equals(s)).findAny().orElse(null);
+    public Either< ErrorApp,Usuario> getUsuarioByUsername(String s) {
+        return dataBase.loadUsuarios().flatMap(usuarios -> {
+            Usuario usuarioDB = usuarios.stream()
+                    .filter(u -> u.getUserName().equals(s))
+                    .findFirst()
+                    .orElse(null);
+            if (usuarioDB == null) {
+                return Either.left(ErrorAppUsuarios.USUARIO_NO_EXISTE);
+            }
+            return Either.right(usuarioDB);
+        });
     }
 }

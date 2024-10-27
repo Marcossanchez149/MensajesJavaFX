@@ -2,41 +2,21 @@
   {
     "email": "juan@blabla",
     "userName": "juan",
-    "password": "juan123"
+    "password": "$2a$10$b8Eu4voS6ORpQODfbIcCm.Rz6qft5ZQ5v.LSTyJAR/zVK5QH.HnvS"
   },
   {
-    "email": "benito@blabla",
-    "userName": "Beni",
-    "password": "Beni123"
-  },
-  {
-    "email": "Paco@blabla",
-    "userName": "Paco",
-    "password": "Paco123"
-  },
-  {
-    "email": "marcos@blabla",
-    "userName": "marcos",
-    "password": "marcos123"
-  },
-  {
-    "email": "eusebio@blabla",
-    "userName": "eusebio",
-    "password": "eusebio123"
-  },
-  {
-    "email": "miguel@blabla",
-    "userName": "miguel",
-    "password": "migluel123"
-  },
-  {
-    "email": "felipe@blabla",
-    "userName": "felipe",
-    "password": "felipe123"
+    "email": "federico@blabla",
+    "userName": "federico",
+    "password": "$2a$10$C93.OPQ8cDSSD480IUBWPu/sr/cfMJluwQQR6DtSXXxmHe0r6jY1G"
   },
   {
     "email": "luis@blabla",
     "userName": "luis",
-    "password": "luis123"
+    "password": "$2a$10$T/CSPo45pK2QjI3ZeGDyuuaJ19L82NX8GNH2zP2AwXZQo39d7aSae"
+  },
+  {
+    "email": "benito@blabla",
+    "userName": "benito",
+    "password": "$2a$10$yGi5iBOEwgK/qVSDgamKPOde25RU6DWTT9lpjM3.g7xFOuYWFTmB2"
   }
 ]

@@ -32,10 +32,10 @@ public class DataBase {
     }
 
 
-    public List<Usuario> loadUsuarios() {
+    public Either<ErrorApp,List<Usuario>> loadUsuarios() {
         Type userListType = new TypeToken<ArrayList<Usuario>>() {
         }.getType();
-        List<Usuario> usuarios = null;
+        List<Usuario> usuarios ;
         try {
             usuarios = gson.fromJson(
                     new FileReader(configuracion.getPathJsonUsuarios()),
@@ -43,28 +43,28 @@ public class DataBase {
             if (usuarios == null) {
                 usuarios = new ArrayList<>();
             }
+            return Either.right(usuarios);
         } catch (FileNotFoundException e) {
             log.error(e.getMessage(), e);
+            return Either.left(ErrorAppDatos.NO_CONNECTION);
         }
-        return usuarios;
     }
 
-    public boolean saveUsuarios(List<Usuario> usuarios) {
+    public Either< ErrorApp,Boolean> saveUsuarios(List<Usuario> usuarios) {
         try (FileWriter w = new FileWriter(configuracion.getPathJsonUsuarios())) {
             gson.toJson(usuarios, w);
         } catch (IOException e) {
             log.error(e.getMessage(), e);
-            return false;
+            return Either.left(ErrorAppDatos.NO_CONNECTION);
         }
-
-        return true;
+        return Either.right(true);
     }
 
     public Either<ErrorApp,List<Grupo>> loadGrupos() {
         Type grupoListType = new TypeToken<ArrayList<Grupo>>() {
         }.getType();
 
-        List<Grupo> grupos = null;
+        List<Grupo> grupos;
         try {
             grupos = gson.fromJson(
                     new FileReader(configuracion.getPathJsonGrupos()),
@@ -79,11 +79,13 @@ public class DataBase {
         return Either.right(grupos);
     }
 
-    public Either<ErrorApp,Void> saveGrupos(List<Grupo> grupos) {
+    public Either<ErrorApp,Boolean> saveGrupos(List<Grupo> grupos) {
         try (FileWriter w = new FileWriter(configuracion.getPathJsonGrupos())) {
             gson.toJson(grupos, w);
+            return Either.right(true);
         } catch (IOException e) {
             log.error(e.getMessage(), e);
+            return Either.left(ErrorAppDatos.NO_CONNECTION);
         }
     }
 }
