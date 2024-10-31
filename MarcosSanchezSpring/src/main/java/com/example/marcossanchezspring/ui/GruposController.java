@@ -6,6 +6,7 @@ import com.example.marcossanchezspring.domain.errors.ErrorAppDatos;
 import com.example.marcossanchezspring.domain.errors.ErrorAppGrupos;
 import com.example.marcossanchezspring.domain.errors.ErrorAppUsuarios;
 import com.example.marcossanchezspring.domain.modelo.Grupo;
+import com.example.marcossanchezspring.domain.modelo.GrupoPrivado;
 import com.example.marcossanchezspring.domain.modelo.Usuario;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -128,9 +129,9 @@ public class GruposController {
         String contrasenaGrupoStr = this.contrasenaGrupo.getText();
         if (!nombreGrupoStr.isEmpty() && !contrasenaGrupoStr.isEmpty()){
             administracionGrupo.crearGrupo(new Grupo
-                    (nombreGrupoStr,contrasenaGrupoStr,false)).peek(ok ->{
+                    (nombreGrupoStr,contrasenaGrupoStr)).peek(ok ->{
                         administracionGrupo.anadirUsuarioaGrupo
-                                ((new Grupo(nombreGrupoStr,contrasenaGrupoStr,false)
+                                ((new Grupo(nombreGrupoStr,contrasenaGrupoStr)
                             ),usuarioIniciadoSesion).peek(ok1 -> {
                             actualizarGruposUsuario();
                             nombreGrupo.clear();
@@ -144,10 +145,10 @@ public class GruposController {
     public void enUnirseaGrupoClick() {
         String nombrerGrupo = nombreGrupoUnirse.getText();
         String contrasenaGrupoAUnirse = contrasenaGrupoUnirse.getText();
-        administracionGrupo.comprobarEntradaGrupo(new Grupo(nombrerGrupo,contrasenaGrupoAUnirse,
-                false)).peek(ok ->{
-            administracionGrupo.anadirUsuarioaGrupo(new Grupo(nombrerGrupo,contrasenaGrupoAUnirse,
-                    false),usuarioIniciadoSesion).peek(ok1 -> {
+        administracionGrupo.comprobarEntradaGrupo(new Grupo(nombrerGrupo,contrasenaGrupoAUnirse)
+        ).peek(ok ->{
+            administracionGrupo.anadirUsuarioaGrupo(new Grupo(nombrerGrupo,contrasenaGrupoAUnirse)
+                    ,usuarioIniciadoSesion).peek(ok1 -> {
                 actualizarGruposUsuario();
                 nombreGrupoUnirse.clear();
                 contrasenaGrupoUnirse.clear();
@@ -174,7 +175,7 @@ public class GruposController {
         Grupo grupoSeleccionado = tablaGrupos.getSelectionModel().getSelectedItem();
         if (grupoSeleccionado != null) {
             administracionGrupo.obtenerMensajes(grupoSeleccionado).peek(mensajes -> {
-                areaMensajes.getItems().clear(); // Clear the list before adding new messages
+                areaMensajes.getItems().clear();
                 mensajes.forEach(mensaje -> {
                     Usuario usuario = mensaje.getUsuario();
                     if (usuario != null) {
@@ -192,9 +193,11 @@ public class GruposController {
         String nombreUsuario = usernamelbox.getText();
         String correoUsuario = emailbox.getText();
         String contrasenia = passwordbox.getText();
-        if(!Objects.equals(nombreUsuario, "") && !Objects.equals(correoUsuario, "") && !Objects.equals(contrasenia, ""))
+        if(!Objects.equals(nombreUsuario, "") && !Objects.equals(correoUsuario, "")
+                && !Objects.equals(contrasenia, ""))
         {
-            administracionUsuarios.crearUsuario(new Usuario(nombreUsuario, correoUsuario, contrasenia)).peek(ok1 -> {
+            administracionUsuarios.crearUsuario(new Usuario(nombreUsuario, correoUsuario, contrasenia))
+                    .peek(ok1 -> {
                 usuarioIniciadoSesion = new Usuario(nombreUsuario, correoUsuario, contrasenia);
                 welcomeText.setText(Constantes.SEHACREADOLACUNETA+ nombreUsuario);
                 paneGrupos.setVisible(true);
@@ -213,9 +216,12 @@ public class GruposController {
         String nombreGrupoStr = this.nombreGrupoprivado.getText();
         String nombresUsuariosStr = this.usuariosGruposprivado.getText();
         if(!nombreGrupoStr.isEmpty() && !nombresUsuariosStr.isEmpty()){
-                administracionUsuarios.buscarUsuariosPorNombres(nombresUsuariosStr).peek(usuariosGruposPrivados -> {
-                    administracionGrupo.crearGrupo(new Grupo(nombreGrupoStr,usuariosGruposPrivados,true)).peek(ok ->{
-                            administracionGrupo.anadirUsuarioaGrupo(new Grupo(nombreGrupoStr,usuariosGruposPrivados,true)
+                administracionUsuarios.buscarUsuariosPorNombres(nombresUsuariosStr).
+                        peek(usuariosGruposPrivados -> {
+                    administracionGrupo.crearGrupoPrivado
+                            (new GrupoPrivado(nombreGrupoStr,usuariosGruposPrivados)).peek(ok ->{
+                            administracionGrupo.anadirUsuarioaGrupoPrivado(
+                                    new GrupoPrivado(nombreGrupoStr,usuariosGruposPrivados)
                                     ,usuarioIniciadoSesion).peek(ok1 -> {
                                 actualizarGruposUsuario();
                                 nombreGrupo.clear();

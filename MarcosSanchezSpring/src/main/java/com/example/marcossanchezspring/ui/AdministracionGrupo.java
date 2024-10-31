@@ -3,6 +3,7 @@ package com.example.marcossanchezspring.ui;
 
 import com.example.marcossanchezspring.domain.errors.ErrorApp;
 import com.example.marcossanchezspring.domain.modelo.Grupo;
+import com.example.marcossanchezspring.domain.modelo.GrupoPrivado;
 import com.example.marcossanchezspring.domain.modelo.Mensaje;
 import com.example.marcossanchezspring.domain.modelo.Usuario;
 import com.example.marcossanchezspring.domain.service.GrupoService;
@@ -10,6 +11,7 @@ import io.vavr.control.Either;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Queue;
 
 @Component
 public class AdministracionGrupo {
@@ -41,5 +43,13 @@ public class AdministracionGrupo {
 
     public Either<ErrorApp, List<Grupo>> obtenerGruposDeUsuario(Usuario usuarioIniciadoSesion) {
         return grupoService.obtenerGruposDeUsuario(usuarioIniciadoSesion);
+    }
+
+    public Either<ErrorApp,Boolean> crearGrupoPrivado(GrupoPrivado grupoPrivado) {
+        return grupoService.crearGrupoPrivado(grupoPrivado);
+    }
+
+    public Either<ErrorApp,Boolean> anadirUsuarioaGrupoPrivado(GrupoPrivado grupoPrivado, Usuario usuarioIniciadoSesion) {
+       return grupoService.anadirUsuarioaGrupoPrivado(grupoPrivado,usuarioIniciadoSesion);
     }
 }

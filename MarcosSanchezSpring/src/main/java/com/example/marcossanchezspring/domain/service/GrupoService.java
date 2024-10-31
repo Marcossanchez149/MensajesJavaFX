@@ -5,6 +5,7 @@ import com.example.marcossanchezspring.dao.DaoGrupos;
 import com.example.marcossanchezspring.domain.errors.ErrorApp;
 import com.example.marcossanchezspring.domain.errors.ErrorAppGrupos;
 import com.example.marcossanchezspring.domain.modelo.Grupo;
+import com.example.marcossanchezspring.domain.modelo.GrupoPrivado;
 import com.example.marcossanchezspring.domain.modelo.Mensaje;
 import com.example.marcossanchezspring.domain.modelo.Usuario;
 import com.example.marcossanchezspring.domain.validators.GrupoValidator;
@@ -29,7 +30,7 @@ public class GrupoService {
     public Either<ErrorApp,Boolean> crearGrupo(Grupo grupo) {
         return grupoValidator.validateGrupo(grupo).flatMap(valido -> {
             if (valido) {
-                if(!(grupo.getContrasena() == null)){
+                if((grupo.getContrasena() != null)){
                     grupo.setContrasena(passwordEncoder.encode(grupo.getContrasena()));
                 }
                 return daoGrupos.crearGrupo(grupo).map(result -> true);
@@ -66,5 +67,11 @@ public class GrupoService {
     public Either<ErrorApp, List<Grupo>> obtenerGruposDeUsuario(Usuario usuarioIniciadoSesion) {
         usuarioIniciadoSesion.setPassword(passwordEncoder.encode(usuarioIniciadoSesion.getPassword()));
         return daoGrupos.getGruposDeUsuario(usuarioIniciadoSesion);
+    }
+
+    public Either<ErrorApp,Boolean> crearGrupoPrivado(GrupoPrivado grupoPrivado) {
+    }
+
+    public Either<ErrorApp,Boolean> anadirUsuarioaGrupoPrivado(GrupoPrivado grupoPrivado, Usuario usuarioIniciadoSesion) {
     }
 }
